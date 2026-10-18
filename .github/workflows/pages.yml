@@ -2,6 +2,8 @@
 # 10-builds-an-hour limit, unlike the branch-built site. A newer push cancels a deploy still in progress.
 name: Deploy league pages
 on:
+  push:
+    branches: [main]
   workflow_dispatch:
 permissions:
   contents: read
