@@ -1,0 +1,26 @@
+# Deploys the league pages on every push (Evan, 18 Oct 2026: one-minute live updates). A custom Actions workflow has no
+# 10-builds-an-hour limit, unlike the branch-built site. A newer push cancels a deploy still in progress.
+name: Deploy league pages
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+concurrency:
+  group: pages
+  cancel-in-progress: true
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+      - id: deployment
+        uses: actions/deploy-pages@v4
